@@ -41,6 +41,16 @@ Setelah semua proses selesai, views.py akan menghasilkan HTTP Response berisi ha
 
 Secara keseluruhan, alur ini memastikan aplikasi Django dapat memproses permintaan pengguna secara tepat, mulai dari menerima HTTP Request, melakukan pemrosesan di views.py, berinteraksi dengan models.py untuk data, merender template HTML, dan akhirnya mengirimkan HTTP Response kembali ke pengguna.
 
+## Jelaskan peran 'settings.py' dalam proyek Django!
+Dalam proyek Django, settings.py berfungsi sebagai file konfigurasi utama yang mengatur pengaturan penting agar aplikasi berjalan dengan baik. Di dalamnya, kita bisa mengonfigurasi hal-hal seperti ALLOWED_HOSTS, yaitu daftar host yang diizinkan untuk mengakses aplikasi, yang penting untuk keamanan aplikasi agar hanya host yang valid yang dapat mengirimkan request.
+
+Selain itu, kita juga bisa mengonfigurasi INSTALLED_APPS, yang berisi daftar aplikasi yang aktif dalam proyek. Di sini, kita menentukan aplikasi-aplikasi yang akan digunakan, baik itu aplikasi bawaan Django atau aplikasi yang kita buat sendiri. Dengan begitu, settings.py memastikan aplikasi berjalan sesuai dengan pengaturan yang kita buat, mulai dari pengaturan host hingga aplikasi yang aktif.
+
+## Bagaimana cara kerja migrasi database di Django?
+Migrasi database digunakan untuk mengubah struktur database sesuai dengan perubahan yang kita buat di kode, khususnya di file models.py. Misalnya, jika kita menambah atau mengubah kode di model, kita perlu memberitahu Django agar database ikut diperbarui.
+
+Caranya, pertama kita buat perubahan di models.py. Setelah itu, jalankan perintah makemigrations yang akan membuat file berisi instruksi perubahan. Kemudian, dengan perintah migrate, kita melakukan perubahan tersebut ke database seperti mengubah struktur kode yang ada. Jadi, migrasi ini memudahkan kita untuk mengatur perubahan database tanpa harus melakukannya secara manual, hanya dengan mengubah kode di Django.
+
 ## Menurut Anda, dari semua framework yang ada, mengapa framework Django dijadikan permulaan pembelajaran pengembangan perangkat lunak?
 Menurut saya, Django sering dijadikan pilihan untuk memulai pembelajaran pengembangan perangkat lunak karena telah terbukti stabil dan banyak digunakan oleh perusahaan-perusahaan besar. Selain itu, Django dibangun dengan menggunakan Python, yang sudah saya kuasai sejak awal kuliah, sehingga membuat saya lebih cepat memahami framework ini. Django juga merupakan framework full-stack, yang memungkinkan pengembang untuk membangun backend sekaligus menyediakan fungsionalitas templating untuk frontend, memungkinkan kita untuk membuat tampilan HTML langsung dari aplikasi backend.
 
