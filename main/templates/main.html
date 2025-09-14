@@ -1,50 +1,42 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZSPORT</title>
-    <style>
-    body {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        background-color: #1d5ae9;
-        font-family: Arial, sans-serif;
-    }
-    .info-box {
-        background: #ffffff;
-        padding: 30px;
-        border-radius: 15px;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-        text-align: center;
-        width: 300px;
-    }
-    .info-box h1 {
-        margin-bottom: 20px;
-        font-weight: bold;
-    }
-    .info-box h5 {
-        margin: 10px 0 5px;
-    }
-    .info-box p {
-        margin: 0 0 15px;
-        font-weight: bold;
-    }
-    </style>
-</head>
-<body>
-    <div class="info-box">
-    <h1 style="color:#41a124; margin-bottom:5px;">ZSPORT </h1>
-    <h5>NPM:</h5>
-    <p>{{ npm }}</p>
+<h1>Football product</h1>
 
-    <h5>Name:</h5>
-    <p>{{ name }}</p>
+<h5>NPM: </h5>
+<p>{{ npm }}</p>
 
-    <h5>Class:</h5>
-    <p>{{ class }}</p>
-    </div>
-</body>
-</html>
+<h5>Name:</h5>
+<p>{{ name }}</p>
+
+<h5>Class:</h5>
+<p>{{ class }}</p>
+
+<a href="{% url 'main:create_product' %}">
+    <button>+ Add product</button>
+</a>
+
+<hr>
+
+{% if not product_list %}
+<p>Belum ada data pada football product.</p>
+{% else %}
+
+{% for product in product_list %}
+<div>
+    <h2><a href="{% url 'main:show_product' product.id %}">{{ product.name }}</a></h2>
+
+    
+    {% if product.is_featured %}
+        | <b>Featured</b>
+    {% endif %}
+
+    {% if product.thumbnail %}
+    <img src="{{ product.thumbnail }}" alt="thumbnail" width="150" height="100">
+    <br />
+    {% endif %}
+
+    <p><a href="{% url 'main:show_product' product.id %}"><button>Read More</button></a></p>
+</div>
+
+<hr>
+{% endfor %}
+
+{% endif %}

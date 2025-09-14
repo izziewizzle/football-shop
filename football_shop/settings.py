@@ -30,6 +30,9 @@ SECRET_KEY = 'django-insecure-i=8fihz#2i(np%kra%md=$r3k897gua_j0x4pqyx24f(2jgw_5
 PRODUCTION = os.getenv('PRODUCTION', 'False').lower() == 'true'
 DEBUG = True
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://izzati-maharani-zsport.pbp.cs.ui.ac.id"
+]
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "izzati-maharani-zsport.pbp.cs.ui.ac.id"]
 
 # Application definition
@@ -59,7 +62,7 @@ ROOT_URLCONF = 'football_shop.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
