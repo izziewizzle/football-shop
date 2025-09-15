@@ -1,44 +1,57 @@
-<h1>Product List</h1>
-
-<h5>NPM: </h5>
-<p>{{ npm }}</p>
-
-<h5>Name:</h5>
-<p>{{ name }}</p>
-
-<h5>Class:</h5>
-<p>{{ class }}</p>
-
-<a href="{% url 'main:create_product' %}">
-    <button>+ Add product</button>
-</a>
-
-<hr>
-
-{% if not product_list %}
-<p>Belum ada data produk pada ZSPORT product.</p>
-{% else %}
-
-{% for product in product_list %}
-<div>
-    <h2><a href="{% url 'main:show_product' product.id %}">{{ product.name }}</a></h2>
-
-    
-    {% if product.is_featured %}
-        | <b>Featured</b>
-    {% endif %}
-
-    {% if product.thumbnail %}
-    <img src="{{ product.thumbnail }}" alt="thumbnail" width="150" height="100">
-    <br />
-    {% endif %}
-
-    <p>{{ product.description|truncatewords:25 }}</p>
-
-    <p><a href="{% url 'main:show_product' product.id %}"><button>Read More</button></a></p>
+{% extends 'base.html' %}
+{% block content %}
+<!-- ZSPORT title -->
+<div class="title">
+    <h1 style="margin-bottom: -10px;">ZSPORT</h1>
 </div>
 
-<hr>
-{% endfor %}
+<!-- Container for About Us and Product Section -->
+<div class="container">
+    <!-- About Us Section -->
+    <div class="left-box">
+        <h1>About Us</h1>
+        <p style="text-align: justify; line-height: 2; font-size: 20px;">Welcome to ZSPORT, your one-stop shop for all things football! We offer a wide range of products, from equipments, clothing, and many more! 
+            Our mission is to provide high-quality products at affordable prices. So, what are you waiting for? come shop with ZSPORT!</p>
 
-{% endif %}
+    <!-- Product Section -->
+    <div class="right-box">
+        <a href="{% url 'main:create_product' %}">
+            <button>+ Add product</button>
+        </a>
+
+        <hr>
+
+        {% if not product_list %}
+            <p>Sorry, products are currently unavailable</p>
+        {% else %}
+            <div class="product-list">
+                {% for product in product_list %}
+                    <div class="product-item">
+                        <h2><a href="{% url 'main:show_product' product.id %}">{{ product.name }}</a></h2>
+
+                        {% if product.is_featured %}
+                            | <b>Featured</b>
+                        {% endif %}
+
+                        {% if product.thumbnail %}
+                        <img src="{{ product.thumbnail }}" alt="thumbnail" width="150" height="100">
+                        <br />
+                        {% endif %}
+
+                        <p>{{ product.description|truncatewords:25 }}</p>
+
+                        <p><a href="{% url 'main:show_product' product.id %}"><button>Read More</button></a></p>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <h3 style="margin-bottom: -10px; font-size: 15px;">Contact owner</h3>
+        <div class="contact-owner">
+            <p>{{ npm }}</p>
+            <p style="margin-left: 20px;">{{ name }}</p>
+            <p style="margin-left: 20px;">{{ class }}</p>
+        </div>
+</div>
+{% endblock content %}

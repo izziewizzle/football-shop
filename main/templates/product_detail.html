@@ -7,28 +7,29 @@
     </a>
 </p>
 
-<h1>{{ product.name }}</h1>
+<div class="product-header">
+    <h1>{{ product.name }}</h1>
+    <p>
+        <b>{{ product.get_category_display }}</b>
+        {% if product.is_featured %}
+            | <b>Featured</b>
+        {% endif %}
+        <i>{{ product.created_at|date:"d M Y, H:i" }}</i>
+    </p>
+</div>
 
-<p>
-    <b>{{ product.get_category_display }}</b>
-    
-    {% if product.is_featured %}
-        | <b>Featured</b>
-    {% endif %}
-    
-    <i>{{ product.created_at|date:"d M Y, H:i" }}</i>
-</p>
+<div class="product-content-box">
+    <div class="product-image">
+        {% if product.thumbnail %}
+            <img src="{{ product.thumbnail }}" alt="Product thumbnail" width="300">
+        {% endif %}
+    </div>
 
-{% if product.thumbnail %}
-    <img src="{{ product.thumbnail }}" alt="Product thumbnail" width="300">
-    <br /><br />
-{% endif %}
-
-<p>{{ product.description }}</p>
-<p>
-    <b>Category:</b> {{ product.category }}<br>
-    <b>Price:</b> Rp {{ product.price }}<br>
-    <b>Description:</b> {{ product.description }}<br>
-</p>
+    <div class="product-details">
+        <p><b>Category:</b> {{ product.category }}</p>
+        <p><b>Price:</b> Rp {{ product.price }}</p>
+        <p><b>Description:</b> {{ product.description }}</p>
+    </div>
+</div>
 
 {% endblock content %}

@@ -1,18 +1,21 @@
 {% extends 'base.html' %} 
 {% block content %}
-<h1>Add Product</h1>
+<h1 style="text-align: center; color: white">Add Product</h1>
 
 <form method="POST">
     {% csrf_token %}
-    <table>
-    {{ form.as_table }}
-    <tr>
-        <td></td>
-        <td>
-        <input type="submit" value="Add PRODUCT"/>
-        </td>
-    </tr>
-    </table>
+    
+    <div class="form-fields">
+        {{ form.as_p }}
+    </div>
+
+    <div class="submit-button-container">
+        <input type="submit" value="ADD PRODUCT"
+        style="
+        border-radius: 5px;
+        border: white;
+        padding: 5px"/>
+    </div>
 </form>
 
 {% endblock %}
