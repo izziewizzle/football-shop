@@ -59,3 +59,30 @@ Namun, meskipun Django memiliki kemampuan templating untuk frontend, sebenarnya 
 ## Apakah ada feedback untuk asisten dosen tutorial 1 yang telah kamu kerjakan sebelumnya?
 Tidak ada, karena menurut saya tutorial 1 sudah cukup jelas.
 </details>
+
+<details align="justify">
+    <summary><b>Tugas 3</b></summary>
+
+##  Jelaskan mengapa kita memerlukan data delivery dalam pengimplementasian sebuah platform?
+Data delivery merupakan aspek penting dalam pengimplementasian suatu platform karena bertujuan untuk memastikan bahwa pertukaran data antar komponen sistem (seperti antara frontend dan backend atau antar microservices) dilakukan dengan cara yang efisien, aman, dan konsisten. Data Delivery menjadi penting karena kebutuhan pertukaran informasi yang tepat secara real-time dan memfasilitasi komunikasi yang seamless antar komponen yang berbeda dalam sistem.
+
+## Menurutmu, mana yang lebih baik antara XML dan JSON? Mengapa JSON lebih populer dibandingkan XML?
+Menurut saya, JSON lebih baik karena lebih readable bagi manusia maupun mesin. JSON juga lebih ringan dibandingkan XML dan lebih mudah diolah oleh bahasa umum di web development seperti JavaScript. Oleh karena itu, JSON lebih populer karena performanya yang lebih efisien dalam konteks pengiriman data di web.
+
+## Jelaskan fungsi dari method is_valid() pada form Django dan mengapa kita membutuhkan method tersebut?
+Method is_valid() digunakan pada objek form untuk memvalidasi data dan juga error handling. Metode ini berfungsi sebagai filter untuk data yang masuk serta memastikan bahwa hanya data yang telah disaring dan bersih yang diterima oleh database.
+
+## Mengapa kita membutuhkan csrf_token saat membuat form di Django? Apa yang dapat terjadi jika kita tidak menambahkan csrf_token pada form Django? Bagaimana hal tersebut dapat dimanfaatkan oleh penyerang?
+Kita membutuhkan csrf_token saat membuat form di Django untuk memastikan bahwa form yang dikirimkan oleh user benar-benar dari user aslinya. Singkatnya, csrf_token melindungi aplikasi dari serangan Cross-Site Request Forgery (CSRF) yaitu serangan keamanan yang memanfaatkan sesi terautentikasi user untuk melakukan aksi tidak sah pada aplikasi web tanpa persetujuan mereka.
+
+Jika tidak menambahkan csrf_token pada form Django, penyerang dapat memanfaatkan celah tersebut untuk melakukan aksi jahat seperti mengirimkan permintaan palsu atas nama user tanpa izin (eksploitasi data). Permintaan jahat tersebut akan dieksekusi karena tidak ada csrf_token untuk memverifikasi permintaan yang menyebabkan platform menganggap permintaan itu sah.
+
+## Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
+Pertama, saya membuat form untuk menerima input, sehingga nantinya data baru bisa ditampilkan dengan membuat file forms.py di direktori main. Lalu, saya membuat view untuk handling form input user dan menyimpan ke database dengan memodifikasi sedikit method show_main dan menambahkan method baru create_product_entry pada untuk menghasilkan form yang dapat menambahkan data Product Entry (ada pada file views.py). Tidak lupa saya untuk membuat template HTML pada main/templates dengan nama file create_product_entry.htmluntuk membuat form.
+
+Setelah itu, saya menambahkan method untuk setiap fungsi views yang akan dibuat. Fungsi tersebut disupport dengan pertama melakukan import terhadap HttpResponse dan serializers. Lalu, menambahkan method show_xml dan show_json pada views.py untuk menyimpan hasil query dari seluruh data yang ada pada entry ChocolateProduct. Untuk melihat objek dalam format XML dan JSON by ID, saya juga menambahkan method baru yang menerima parameter id juga, yaitu show_xml_by_id dan show_json_by_id. Dengan menggunakan parameter id kita dapat meilihat per objek by idnya masing-masing.
+
+Terakhir, saya juga menambahkan path URL ke dalam variabel urlpatterns pada urls.py di main untuk mengakses fungsi yang sudah di-import pada poin sebelumnya.
+
+## Apakah ada feedback untuk asdos di tutorial 2 yang sudah kalian kerjakan?
+</details>
