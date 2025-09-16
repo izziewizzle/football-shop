@@ -15,7 +15,6 @@ def show_main(request):
         'class': 'PBP F',
         'product_list': product
     }
-
     return render(request, "main.html", context)
 
 def create_product(request):
