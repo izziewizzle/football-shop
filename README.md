@@ -64,15 +64,40 @@ Tidak ada, karena menurut saya tutorial 1 sudah cukup jelas.
     <summary><b>Tugas 3</b></summary>
 
 ##  Jelaskan mengapa kita memerlukan data delivery dalam pengimplementasian sebuah platform?
+Data delivery sangat dibutuhkan dalam pengimplementasian platform karena memastikan data dapat dikirim dengan cepat, aman, dan efisien ke seluruh bagian platform. Dengan sistem ini, performa platform jadi lebih optimal, terutama saat ada banyak pengguna yang mengakses data secara bersamaan. Selain itu, data delivery mendukung pengalaman pengguna yang lebih personal, misalnya dengan memberikan rekomendasi yang sesuai dengan preferensi mereka. Sistem ini juga membuat platform lebih mudah berkembang dan menjaga data tetap aman. Jadi, tanpa data delivery yang oke, platform dapat menjadi lambat atau bahkan tidak berfungsi dengan baik.
+
 
 ## Menurutmu, mana yang lebih baik antara XML dan JSON? Mengapa JSON lebih populer dibandingkan XML?
+Menurut saya, JSON lebih baik dan populer daripada XML karena  ringan, mudah dibaca, dan lebih cepat diproses. JSON juga terintegrasi langsung dengan JavaScript, membuatnya lebih mudah digunakan di aplikasi web. Selain itu, JSON lebih sederhana, efisien, dan sering digunakan di API modern, sementara XML lebih kompleks dan membutuhkan lebih banyak sumber daya untuk diproses.
 
 ## Jelaskan fungsi dari method is_valid() pada form Django dan mengapa kita membutuhkan method tersebut?
+Method is_valid() pada form Django berfungsi untuk memeriksa apakah data yang dimasukkan ke dalam form sesuai dengan validasi yang telah ditentukan (misalnya, tipe data yang benar, panjang karakter yang sesuai, dan sebagainya).
+
+Kita membutuhkan method ini untuk memastikan bahwa data yang diterima dari pengguna sudah memenuhi aturan yang telah ditetapkan sebelum diproses lebih lanjut, seperti disimpan ke database atau digunakan dalam logika aplikasi. Dengan menggunakan is_valid(), kita dapat mencegah error atau data yang tidak valid masuk ke dalam sistem, menjaga integritas dan keamanan aplikasi.
 
 ## Mengapa kita membutuhkan csrf_token saat membuat form di Django? Apa yang dapat terjadi jika kita tidak menambahkan csrf_token pada form Django? Bagaimana hal tersebut dapat dimanfaatkan oleh penyerang?
+Kita membutuhkan csrf_token di form Django untuk melindungi aplikasi dari serangan Cross-Site Request Forgery (CSRF). CSRF adalah jenis serangan di mana penyerang mencoba untuk mengirimkan request palsu atas nama user yang terverifikasi tanpa sepengetahuan mereka, misalnya dengan mengeksploitasi sesi user yang sedang aktif.
 
+Jika kita tidak menambahkan csrf_token, form akan rentan terhadap serangan CSRF, yang dapat memungkinkan penyerang untuk melakukan tindakan yang merugikan, seperti mengubah data user atau melakukan transaksi tanpa izin. CSRF token berfungsi sebagai lapisan perlindungan dengan memastikan bahwa setiap permintaan yang dikirimkan ke server berasal dari sumber yang terverifikasi dan bukan dari situs jahat.
 
 ## Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
+Pertama, saya membuat base setup HTML-nya terlebih dahulu. Kemudian, saya mengonfigurasi settings.py agar template dari folder main didahulukan daripada base HTML yang ada pada admin.
+
+Selanjutnya, saya menambahkan form di forms.py untuk input produk. Setelah itu, saya menambah beberapa import dan function di views.py untuk keperluan redirect ke halaman baru.
+
+Setelah itu, saya menambahkan function yang baru dibuat ke URL path di urls.py. Kemudian, saya menambahkan button pada main.html untuk redirect ke halaman baru.
+
+Saya juga membuat dua file HTML baru (new page) untuk halaman create product dan product detail, agar tidak semua ada dalam satu file main.html. Selain itu, saya menambahkan link website saya ke dalam CSRF_TRUSTED_ORIGINS agar data tetap aman dan tidak mudah dicuri.
+
+Berikutnya, saya menambahkan function show_xml, show_json, show_xml_by_id, dan show_json_by_id di views.py untuk mengembalikan data dan data berdasarkan ID. Setelah itu, saya menambahkan function-function tersebut ke dalam URL path di urls.py. Terakhir, saya menambahkan import font di base.html untuk keperluan styling CSS.
 
 ## Apakah ada feedback untuk asdos di tutorial 2 yang sudah kalian kerjakan?
+Tidak ada, sudah cukup jelas dan bagus
+
+## Mengakses keempat URL di poin 2 menggunakan Postman, membuat screenshot dari hasil akses URL pada Postman
+![1. show_xml](show_xml.png>)
+![2. show_xml_by_id](show_xml_by_id.png)
+![3. show_json](show_json.png)
+![4. show_json_by_id](show_json_by_id.png)
+
 </details>
