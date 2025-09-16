@@ -95,9 +95,16 @@ Berikutnya, saya menambahkan function show_xml, show_json, show_xml_by_id, dan s
 Tidak ada, sudah cukup jelas dan bagus
 
 ## Mengakses keempat URL di poin 2 menggunakan Postman, membuat screenshot dari hasil akses URL pada Postman
-![1. show_xml](show_xml.png>)
+1. 'show_xml'
+![1. show_xml](show_xml.png)
+
+2. 'show_xml_by_id'
 ![2. show_xml_by_id](show_xml_by_id.png)
+
+3. 'show_json'
 ![3. show_json](show_json.png)
+
+4. 'show_json_by_id'
 ![4. show_json_by_id](show_json_by_id.png)
 
 </details>
