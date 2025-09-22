@@ -1,9 +1,5 @@
 {% extends 'base.html' %}
 {% block content %}
-<!-- ZSPORT title -->
-<div class="title">
-    <h1 style="margin-bottom: -10px;">ZSPORT</h1>
-</div>
 
 <!-- Container for About Us and Product Section -->
 <div class="container">
@@ -19,7 +15,19 @@
             <button>+ Add product</button>
         </a>
 
-        <hr>
+        <a href="{% url 'main:logout' %}">
+            <button>Logout</button>
+        </a>
+
+        <h5>Last login session: {{ last_login }}</h5>
+        <hr style="margin-bottom: 20px;">
+
+        <a href="?filter=all">
+            <button type="button">All Products</button>
+        </a>
+        <a href="?filter=my">
+            <button type="button">My Products</button>
+        </a> 
 
         {% if not product_list %}
             <p>Sorry, products are currently unavailable</p>
@@ -47,11 +55,10 @@
         {% endif %}
     </div>
 
-    <h3 style="margin-bottom: -10px; font-size: 15px;">Contact owner</h3>
-        <div class="contact-owner">
-            <p>{{ npm }}</p>
-            <p style="margin-left: 20px;">{{ name }}</p>
-            <p style="margin-left: 20px;">{{ class }}</p>
-        </div>
+    <div class="contact-owner">
+        <h3>Application made by</h3>
+        <p style="display: inline;">{{ owner_name }}</p>
+        <p style="display: inline; margin-left: 20px;">{{ class }}</p>
+    </div>
 </div>
 {% endblock content %}

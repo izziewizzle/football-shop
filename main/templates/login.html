@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block meta %}
+<title>Login</title>
+{% endblock meta %}
+
+{% block content %}
+<section class="auth-wrap">
+    <!-- Login Card -->
+    <div class="auth-card", s>
+        <div class="brand" style="margin-bottom:10px">
+            <span class="brand-badge">Z</span> ZSPORT
+        </div>
+
+    <h1 class="form-title">Welcome back</h1>
+    <p class="form-sub">Login to access new collections.</p>
+
+    <form method="POST" action="">
+        {% csrf_token %}
+        <table>
+            {{ form.as_table }}
+            <tr>
+            <td></td>
+            <td>
+                <input class="btn primary block" type="submit" value="Login" />
+            </td>
+            </tr>
+        </table>
+    </form>
+
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+
+        <p class="muted" style="margin-top:16px">
+        Don't have an account?
+        <a href="{% url 'main:register' %}"><b>Sign Up</b></a>
+        </p>
+    </div>
+</section>
+{% endblock content %}

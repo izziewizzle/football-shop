@@ -32,4 +32,10 @@
     </div>
 </div>
 
+{% if product.user %}
+    <p>Seller: {{ product.user.username }}</p>
+{% else %}
+    <p>Author: Anonymous</p>
+{% endif %}
+
 {% endblock content %}

@@ -108,3 +108,42 @@ Tidak ada, sudah cukup jelas dan bagus
 ![4. show_json_by_id](show_json_by_id.png)
 
 </details>
+
+<details align="justify">
+    <summary><b>Tugas 4</b></summary>
+
+## 1. Apa itu Django AuthenticationForm? Jelaskan juga kelebihan dan kekurangannya.
+AuthenticationForm adalah form bawaan Django yang digunakan untuk menangani proses login pengguna. Form ini secara otomatis menyediakan field username dan password, serta melakukan validasi apakah data yang dimasukkan sesuai dengan akun yang terdaftar dan aktif. Dengan adanya form ini, developer tidak perlu membuat form login dari awal karena Django sudah menyiapkan mekanismenya secara langsung.
+
+Kelebihan dari AuthenticationForm adalah kemudahannya karena sudah terintegrasi dengan sistem autentikasi Django. Proses validasi login berjalan otomatis, sehingga lebih aman dan membantu menghemat waktu pengembangan. Selain itu, form ini juga fleksibel karena dapat diextend jika ingin menambahkan atribut baru atau menyesuaikan tampilannya sesuai kebutuhan aplikasi.
+
+Namun, AuthenticationForm juga memiliki kekurangan. Secara default, form ini hanya mendukung login dengan username dan password, sehingga perlu dilakukan modifikasi jika ingin menggunakan email atau metode login lain. Tampilan bawaannya cukup sederhana sehingga kurang menarik untuk aplikasi yang membutuhkan desain modern. Selain itu, fitur tambahan seperti “remember me” atau captcha tidak tersedia langsung dan harus ditambahkan secara manual.
+
+## 2. Apa perbedaan antara autentikasi dan otorisasi? Bagaiamana Django mengimplementasikan kedua konsep tersebut?
+Autentikasi adalah proses untuk memverifikasi identitas pengguna, misalnya dengan login menggunakan username dan password. Otorisasi adalah tahap setelahnya, yaitu menentukan hak akses pengguna yang sudah terverifikasi, misalnya apakah bisa mengakses halaman admin atau hanya halaman biasa.
+
+Di Django, autentikasi diimplementasikan melalui modul django.contrib.auth yang menyediakan sistem login, logout, dan manajemen user. Modul ini juga mendukung autentikasi berbasis session maupun token sehingga dapat digunakan pada aplikasi web maupun API.
+
+Sementara itu, otorisasi di Django berjalan dengan mekanisme permission, group, dan role. Setiap model memiliki permission bawaan seperti add, change, dan delete, serta bisa dibuat permission khusus. Developer dapat menggunakan dekorator seperti @login_required atau @permission_required, maupun atribut seperti is_staff dan is_superuser, untuk membatasi akses pengguna sesuai haknya.
+
+## 3. Apa saja kelebihan dan kekurangan session dan cookies dalam konteks menyimpan state di aplikasi web?
+Session dan cookies adalah dua mekanisme yang umum dipakai untuk menyimpan state di aplikasi web, masing-masing punya kelebihan dan kekurangan.
+
+Session menyimpan data di server, sedangkan browser hanya menyimpan session ID dalam bentuk cookie. Kelebihannya, data lebih aman karena tidak langsung tersimpan di sisi client, serta bisa menyimpan informasi yang lebih kompleks. Kekurangannya, session membebani server karena data user harus disimpan di server, dan jika jumlah user sangat banyak dapat memengaruhi performa.
+
+Cookies menyimpan data langsung di sisi client (browser). Kelebihannya, lebih ringan untuk server karena data tidak perlu disimpan di sana, dan mudah diakses untuk kebutuhan sederhana seperti preferensi tampilan. Namun, kekurangannya cookies lebih rentan terhadap manipulasi atau pencurian data jika tidak diamankan, serta terbatas ukuran penyimpanannya (umumnya 4KB per cookie).
+
+## 4. Apakah penggunaan cookies aman secara default dalam pengembangan web, atau apakah ada risiko potensial yang harus diwaspadai? Bagaimana Django menangani hal tersebut?
+Penggunaan cookies tidak sepenuhnya aman karena bisa menjadi target serangan seperti XSS atau session hijacking. Kalau cookie berisi session ID dicuri, penyerang dapat login sebagai user. Selain itu, cookies selalu ikut terkirim di tiap request, jadi rawan kebocoran data kalau tidak diamankan.
+
+Django sudah memberikan proteksi bawaan dengan menandatangani cookies dengan SECRET_KEY, ditambah opsi keamanan seperti HttpOnly (agar tidak dapat diakses JavaScript), Secure (hanya lewat HTTPS), SESSION_COOKIE_AGE untuk atur masa berlaku, dan pengaturan khusus untuk token CSRF.
+
+Dengan konfigurasi ini cookies menjadi lebih aman, tetapi developer tetap perlu hati-hati dengan cara aktifkan HTTPS di production, gunakan HttpOnly dan Secure, serta pastikan aplikasi bebas dari XSS.
+
+## 5. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
+Pertama, saya menambahkan sistem registrasi dan login agar pengguna dapat membuat akun sendiri. Untuk proses registrasi, saya menggunakan UserCreationForm bawaan Django karena sudah menyediakan validasi username dan password secara otomatis, sehingga lebih aman dan praktis. Setelah akun berhasil dibuat, pengguna dapat melakukan login menggunakan AuthenticationForm. Ketika login berhasil, saya menyimpan informasi waktu terakhir login ke dalam cookie last_login, dan saat pengguna melakukan logout cookie tersebut akan dihapus agar tidak tersisa di browser.
+
+Pada halaman utama, saya memberikan pembatasan akses menggunakan login_required, sehingga hanya pengguna yang sudah login yang dapat mengaksesnya. Informasi yang ditampilkan juga disesuaikan, seperti username pengguna yang sedang login, daftar data yang dimilikinya, serta timestamp dari cookie last_login. Dengan mekanisme ini, setiap pengguna akan memiliki halaman utama yang lebih personal dan sesuai dengan akun masing-masing.
+
+Selain itu, saya juga menambahkan konfigurasi keamanan pada cookies dan session di settings.py. Beberapa di antaranya adalah mengaktifkan opsi HttpOnly agar cookie tidak bisa diakses melalui JavaScript, serta mengatur SameSite untuk mengurangi risiko CSRF. Jika aplikasi dijalankan dalam mode produksi, opsi Secure=True juga akan digunakan agar cookies hanya terkirim melalui HTTPS. Dengan demikian, alur sistem autentikasi menjadi lebih lengkap dan aman, mulai dari registrasi, login, melihat data sesuai akun, hingga logout dengan perlindungan cookies dan session yang memadai. Terakhir, barulah saya mendesain halaman web menggunakan CSS.
+</details>

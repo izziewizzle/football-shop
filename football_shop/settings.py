@@ -33,7 +33,7 @@ DEBUG = True
 CSRF_TRUSTED_ORIGINS = [
     "https://izzati-maharani-zsport.pbp.cs.ui.ac.id"
 ]
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "izzati-maharani-zsport.pbp.cs.ui.ac.id"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "izzati-maharani-zsport.pbp.cs.ui.ac.id", "admin"]
 
 # Application definition
 
