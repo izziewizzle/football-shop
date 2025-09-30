@@ -1,325 +1,44 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
+    <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     {% block meta %}{% endblock meta %}
 
-    <!-- Font -->
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Font Poppins -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
+    <link rel="stylesheet" href="{% static 'css/global.css' %}"/>
+
+    <!-- Custom CSS Variables -->
     <style>
-    :root {
+        :root {
         --ink: #1A1A1A;     /* text */
         --leaf: #0D3405;    /* primary */
         --mint: #E5FFE0;    /* accent bg */
         --paper: #F4FFF2;   /* page bg */
         --silver: #E2E2E2;  /* borders */
+        --lightgreen: #3c5b36; /* lighter accent bg */
         --radius: 16px;
         --shadow: 0 6px 20px rgba(0,0,0,.06);
-    }
+        }
 
-    body {
+        body {
+        font-family: 'Poppins', sans-serif;
+        color: var(--ink);
+        background: var(--paper);
         margin: 0;
-        font-family: Poppins, sans-serif;
-        color: var(--ink);
-        background:
-        radial-gradient(1200px 600px at 20% -10%, var(--mint), transparent 60%),
-        radial-gradient(900px 500px at 110% 10%, #ffffff, transparent 60%),
-        var(--paper);
-    }
-
-    a {
-        color: var(--leaf);
-        text-decoration: none;
-    }
-
-    /* ===================== NAVBAR ===================== */
-    .navbar {
-        background: var(--leaf);
-        color: #fff;
-        padding: 14px 24px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between; /* kiri brand, kanan seller */
-        box-shadow: var(--shadow);
-
-        position: fixed; /*supaya stay tidak kescroll*/
-        top: 0;
-        left: 0;
-        right: 0;
-        z-index: 1000;
-    }
-
-    .brand-btn {
-        display: inline-block;
-        padding: 12px 18px;
-        border-radius: 999px;
-        font-weight: 900;
-        font-size: 1.6rem;
-        letter-spacing: .06em;
-        color: #fff;
-        background: rgba(255,255,255,.12);
-        border: 1px solid rgba(255,255,255,.22);
-    }
-
-    .brand-btn:hover {
-        background: rgba(255,255,255,.18);
-        border-color: rgba(255,255,255,.32);
-        text-decoration: none;
-        transform: translateY(-1px);
-    }
-
-    /* ===================== CONTACT SELLER ===================== */
-    .contact-seller {
-        display: flex;
-        align-items: center;
-        gap: 20px;
-        font-size: 1rem;
-        color: #fff;
-    }
-
-    /* ===================== WRAPPER ===================== */
-    .page {
-        min-height: 100dvh;      /* biar tetap rapi saat navbar tersembunyi (belum login) */
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 32px 16px;
-    }
-
-    /* ===================== BUTTONS (ijo + hover) ===================== */
-    button,
-    input[type="button"],
-    input[type="submit"],
-    a.btn,
-    .right-box button {
-        display: inline-block;
-        padding: 10px 14px;
-        border-radius: 999px;
-        font-weight: 700;
-        border: 1px solid var(--leaf);
-        background: var(--leaf);
-        color: #fff;
-        cursor: pointer;
-    }
-
-    button:hover,
-    input[type="button"]:hover,
-    input[type="submit"]:hover,
-    a.btn:hover,
-    .right-box button:hover {
-        filter: brightness(.95);
-        text-decoration: none;
-        transform: translateY(-1px);
-    }
-
-    button:active,
-    input[type="button"]:active,
-    input[type="submit"]:active,
-    a.btn:active,
-    .right-box button:active {
-        transform: translateY(0);
-    }
-
-    /* ===================== INPUTS ===================== */
-    input[type="text"],
-    input[type="email"],
-    input[type="password"],
-    input[type="number"],
-    select,
-    textarea {
-        width: 100%;
-        padding: 12px 14px;
-        border: 1px solid var(--silver);
-        border-radius: 12px;
-        font: inherit;
-        background: #fff;
-    }
-
-    input:focus,
-    select:focus,
-    textarea:focus {
-        outline: 3px solid rgba(13,52,5,.15);
-        border-color: var(--leaf);
-    }
-
-    /* ===================== MESSAGES ===================== */
-    .messages {
-        list-style: none;
-        padding: 0;
-        margin: 16px 0 0;
-    }
-
-    .messages li {
-        background: var(--mint);
-        border: 1px solid var(--silver);
-        padding: 10px 12px;
-        border-radius: 12px;
-    }
-
-    /* ===================== AUTH PAGES ===================== */
-    .auth-wrap {
-        width: 100%;
-        max-width: 880px;
-        gap: 24px;
-    }
-
-    .auth-card {
-        background: #fff;
-        border: 1px solid var(--silver);
-        border-radius: var(--radius);
-        box-shadow: var(--shadow);
-        padding: 70px;
-    }
-
-    .panel {
-        background: linear-gradient(180deg, var(--paper), var(--mint));
-        border: 1px solid var(--silver);
-        border-radius: var(--radius);
-        box-shadow: var(--shadow);
-        padding: 28px;
-    }
-
-    .brand-badge {
-        background: var(--leaf);
-        color: #fff;
-        padding: .35em .7em;
-        border-radius: 999px;
-        font-weight: 800;
-        font-size: .95rem;
-    }
-
-    .form-title {
-        margin: 0 0 10px;
-        font-size: 1.8rem;
-    }
-
-    .form-sub {
-        margin: 0 0 18px;
-        color: #333;
-        font-weight: 400;
-    }
-
-    table {
-        width: 100%;
-        border-collapse: separate;
-        border-spacing: 0 10px;
-    }
-
-    td {
-        vertical-align: middle;
-    }
-
-    td:first-child {
-        width: 35%;
-        color: #333;
-        font-weight: 600;
-    }
-
-    /* ===================== MAIN / PRODUCT PAGES ===================== */
-    .container {
-        display: flex;
-        justify-content: space-between;
-        gap: 20px;
-        padding: 20px;
-    }
-
-    .left-box,
-    .right-box {
-        flex: 1;
-        padding: 30px 50px;
-        background: #fff;
-        border: 1px solid var(--silver);
-        border-radius: 15px;
-        color: var(--ink);
-        box-shadow: var(--shadow);
-    }
-
-    .title {
-        text-align: center;
-        margin: 0 0 30px;
-        font-size: 40px;
-        color: var(--leaf);
-        font-weight: 800;
-    }
-
-    .product-list {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 20px;
-        margin-top: 30px;
-    }
-
-    .product-item {
-        background: #fff;
-        border: 1px solid var(--silver);
-        border-radius: 12px;
-        padding: 15px;
-        width: calc(33.333% - 20px);
-        box-sizing: border-box;
-        text-align: justify;
-        box-shadow: var(--shadow);
-    }
-
-    .product-item img {
-        width: 145px;
-        height: 145px;
-        border-radius: 8px;
-    }
-
-    .contact-owner {
-        margin-top: 50px;
-        font-size: 0.9rem;
-        color: #555;
-    }
-
-    /* ===================== RESPONSIVE ===================== */
-    @media (max-width: 880px) {
-        .auth-wrap {
-        grid-template-columns: 1fr;
-        }
-
-        .panel {
-            order: -1;
-        }
-
-        .container {
-            flex-direction: column;
-        }
-
-        .product-item {
-            width: calc(50% - 20px);
-        }
-        }
-
-        @media (max-width: 480px) {
-            .product-item {
-                width: 100%;
-            }
         }
     </style>
-</head>
-<body>
-
-    {# Navbar hanya tampil kalau user sudah login #}
-    {% if user.is_authenticated %}
-    <header class="navbar">
-        <a class="brand-btn" href="{% url 'main:show_main' %}">ZSPORT</a>
-            <div class="contact-seller">
-                <p style="display: inline; margin-left: 20px;">{{ name }}</p>
-                <p style="display: inline; margin-left: 20px;">{{ class }}</p>
-            </div>
-
-    </header>
-    {% endif %}
-
-    <main class="page">
-    {% block content %}{% endblock content %}
-    </main>
-</body>
+    </head>
+    <body>
+        {% block content %}{% endblock content %}
+    </body>
 </html>

@@ -1,64 +1,166 @@
 {% extends 'base.html' %}
+{% load static %}
+{% block meta %}<title>ZSPORT — Products</title>{% endblock meta %}
+
 {% block content %}
+{% include 'navbar.html' %}
 
-<!-- Container for About Us and Product Section -->
-<div class="container">
-    <!-- About Us Section -->
-    <div class="left-box">
-        <h1>About Us</h1>
-        <p style="text-align: justify; line-height: 2; font-size: 20px;">Welcome to ZSPORT, your one-stop shop for all things football! We offer a wide range of products, from equipments, clothing, and many more! 
-            Our mission is to provide high-quality products at affordable prices. So, what are you waiting for? come shop with ZSPORT!</p>
+<div class="max-w-7xl mx-auto w-full px-6 lg:px-8 mt-24"> 
+    <!-- Welcome / About Section -->
+    <section class="relative rounded-2xl shadow-lg overflow-hidden mb-10">
+    <!-- Background image -->
+    <div class="absolute inset-0">
+        <img src="{% static 'image/profile.jpg' %}" 
+            alt="Football background" 
+            class="w-full h-full object-cover opacity-60">
+        <!-- Overlay tipis gelap biar teks lebih kebaca -->
+        <div class="absolute inset-0 bg-black/50"></div>
+    </div>
 
-    <!-- Product Section -->
-    <div class="right-box">
-        <a href="{% url 'main:create_product' %}">
-            <button>+ Add product</button>
-        </a>
+    <!-- Content -->
+    <div class="relative z-10 px-8 lg:px-16 py-16 text-center text-white">
+        <h1 class="text-4xl md:text-5xl font-extrabold mb-6 drop-shadow-lg">
+        Welcome to <span class="text-[var(--mint)]">ZSPORT</span>
+        </h1>
+        <p class="max-w-3xl mx-auto text-lg md:text-xl leading-relaxed mb-6">
+        Your one-stop shop for all things football!  
+        We offer a wide range of products: <span class="font-semibold">equipment</span>,  
+        <span class="font-semibold">clothing</span>, and more.  
+        Our mission is to provide <span class="text-[var(--mint)] font-bold">high-quality products</span>  
+        at affordable prices.
+        </p>
+    </div>
+    </section>
 
-        <a href="{% url 'main:logout' %}">
-            <button>Logout</button>
-        </a>
-
-        <h5>Last login session: {{ last_login }}</h5>
-        <hr style="margin-bottom: 20px;">
-
-        <a href="?filter=all">
-            <button type="button">All Products</button>
-        </a>
-        <a href="?filter=my">
-            <button type="button">My Products</button>
-        </a> 
+    <!-- Products Section -->
+    <section class="bg-white border border-[var(--silver)] rounded-2xl shadow p-6 lg:p-8">
+        <!-- Filters + Last login -->
+        <div class="flex items-center justify-between mb-6 flex-wrap gap-3">
+        <div class="flex gap-2">
+            <a href="?filter=all"
+            class="px-4 py-2 rounded-full border border-[var(--leaf)] text-[var(--leaf)] hover:bg-[var(--silver)] transition">
+            All Products
+            </a>
+            <a href="?filter=my"
+            class="px-4 py-2 rounded-full border border-[var(--leaf)] text-[var(--leaf)] hover:bg-[var(--silver)] transition">
+            My Products
+            </a>
+        </div>
+        <span class="text-sm text-gray-600">
+            Last login session:
+            <span class="font-medium text-[var(--leaf)]">{{ last_login }}</span>
+        </span>
+        </div>
 
         {% if not product_list %}
-            <p>Sorry, products are currently unavailable</p>
-        {% else %}
-            <div class="product-list">
-                {% for product in product_list %}
-                    <div class="product-item">
-                        <h2><a href="{% url 'main:show_product' product.id %}">{{ product.name }}</a></h2>
-
-                        {% if product.is_featured %}
-                            | <b>Featured</b>
-                        {% endif %}
-
-                        {% if product.thumbnail %}
-                        <img src="{{ product.thumbnail }}" alt="thumbnail" width="150" height="100">
-                        <br />
-                        {% endif %}
-
-                        <p>{{ product.description|truncatewords:25 }}</p>
-
-                        <p><a href="{% url 'main:show_product' product.id %}"><button>Read More</button></a></p>
-                    </div>
-                {% endfor %}
+        <!-- Empty state -->
+        <div class="flex flex-col items-center justify-center py-16 text-center">
+            <div class="w-40 h-40 mb-6 rounded-full bg-gray-100 flex items-center justify-center text-gray-400">
+                <img src="{% static 'image/no-product.png' %}" alt="No products available" class="w-full h-full object-contain">
             </div>
-        {% endif %}
-    </div>
+            <h3 class="text-lg font-semibold text-gray-700">No products available</h3>
+            <p class="text-gray-500">Please check again later or add your first product!</p>
+        </div>
+        {% else %}
+        <!-- Product grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {% for product in product_list %}
+            <article class="group bg-white border border-[var(--silver)] rounded-2xl overflow-hidden
+                            shadow-sm hover:shadow-md hover:-translate-y-0.5 hover:ring-1 hover:ring-[var(--leaf)]
+                            transition">
+                <!-- Image -->
+                <div class="relative">
+                {% if product.thumbnail %}
+                    <a href="{% url 'main:show_product' product.id %}" class="block bg-gray-50">
+                    <img src="{{ product.thumbnail }}" alt="{{ product.name }}"
+                        class="w-full aspect-square object-cover">
+                    </a>
+                {% else %}
+                    <div class="w-full aspect-square bg-gray-100 flex items-center justify-center text-gray-400">
+                    No Image
+                    </div>
+                {% endif %}
 
-    <div class="contact-owner">
-        <h3>Application made by</h3>
-        <p style="display: inline;">{{ owner_name }}</p>
-        <p style="display: inline; margin-left: 20px;">{{ class }}</p>
-    </div>
-</div>
+                <!-- Left badges (Category) -->
+                <div class="absolute top-3 left-3 flex flex-wrap gap-2">
+                    {% if product.category %}
+                    <span class="px-2.5 py-1 rounded-md text-xs font-semibold bg-[var(--lightgreen)] text-white shadow">
+                        {{ product.get_category_display }}
+                    </span>
+                    {% endif %}
+                </div>
+
+                <!-- Right badges (Status) -->
+                <div class="absolute top-3 right-3 flex flex-wrap gap-2">
+                    {% if product.is_featured %}
+                    <span class="px-2.5 py-1 rounded-md text-xs font-semibold bg-yellow-100 text-yellow-800 border border-yellow-300 shadow">
+                        Featured
+                    </span>
+                    {% endif %}
+                    {% if product.is_hot %}
+                    <span class="px-2.5 py-1 rounded-md text-xs font-semibold bg-red-100 text-red-800 border border-red-200 shadow">
+                        Hot
+                    </span>
+                    {% endif %}
+                </div>
+                </div>
+
+                <!-- Body -->
+                <div class="p-5">
+                <h2 class="text-xl font-extrabold text-[var(--ink)] leading-snug mb-2">
+                    <a href="{% url 'main:show_product' product.id %}" class="hover:text-[var(--leaf)]">
+                    {{ product.name }}
+                    </a>
+                </h2>
+
+                <p class="text-xl font-extrabold text-[var(--leaf)] mb-2">
+                    Rp {{ product.price }}
+                </p>
+
+                <p class="text-[15px] text-gray-700 leading-7 text-justify line-clamp-3 mb-4">
+                    {{ product.description|truncatewords:10 }}
+                </p>
+
+                <!-- Actions -->
+                <div class="flex flex-wrap items-center gap-3">
+                    <a href="{% url 'main:show_product' product.id %}"
+                    class="inline-flex items-center h-10 px-5 rounded-full
+                            bg-[var(--lightgreen)] text-white text-sm font-semibold
+                            hover:brightness-95 focus:outline-none
+                            focus:ring-2 focus:ring-[var(--leaf)]/30 transition">
+                    Read More
+                    </a>
+
+                    {% if user.is_authenticated and product.user == user %}
+                    <a href="{% url 'main:edit_product' product.pk %}"
+                        class="inline-flex items-center h-10 px-5 rounded-full
+                                border border-[var(--leaf)] text-[var(--leaf)] text-sm font-semibold
+                                hover:bg-[var(--silver)] focus:outline-none
+                                focus:ring-2 focus:ring-[var(--leaf)]/20 transition">
+                        Edit
+                    </a>
+
+                    <a href="{% url 'main:delete_product' product.pk %}"
+                        class="inline-flex items-center h-10 px-5 rounded-full
+                                text-red-700 bg-red-50 text-sm font-semibold
+                                hover:bg-red-100 focus:outline-none
+                                focus:ring-2 focus:ring-red-300 transition">
+                        Delete
+                    </a>
+                    {% endif %}
+                </div>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </section>
+
+    <!-- Footer -->
+    <footer class="mt-10 mb-10 text-sm text-gray-700">
+        <h3 class="font-semibold text-[var(--leaf)] mb-2">Website made by</h3>
+        <p class="inline">{{ owner_name }} - {{ class }}</p>
+    </footer>
+</div>  {# tutup div max-w-7xl #}
+
 {% endblock content %}

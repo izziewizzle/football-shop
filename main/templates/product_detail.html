@@ -1,41 +1,114 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block meta %}
+<title>{{ product.name }} - ZSPORT</title>
+{% endblock meta %}
+
 {% block content %}
+<div class="bg-[var(--paper)] w-full min-h-screen py-12">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
 
-<p>
-    <a href="{% url 'main:show_main' %}">
-        <button>← Back to Product List</button>
-    </a>
-</p>
+        <!-- Back -->
+        <div class="mb-6">
+        <a href="{% url 'main:show_main' %}" 
+            class="inline-flex items-center gap-2 px-4 py-2 rounded-full 
+                    bg-white text-[var(--leaf)] font-semibold
+                    border border-[var(--leaf)]
+                    hover:bg-[var(--leaf)] hover:text-white hover:shadow-md
+                    transition">
+            <!-- Panah kiri -->
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" 
+                stroke="currentColor" class="w-4 h-4">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                    d="M15 19l-7-7 7-7" />
+            </svg>
+            Back to Products
+        </a>
+        </div>
 
-<div class="product-header">
-    <h1>{{ product.name }}</h1>
-    <p>
-        <b>{{ product.get_category_display }}</b>
-        {% if product.is_featured %}
-            | <b>Featured</b>
-        {% endif %}
-        <i>{{ product.created_at|date:"d M Y, H:i" }}</i>
-    </p>
-</div>
+        <!-- Card -->
+        <div class="bg-white border border-[var(--silver)] rounded-2xl shadow-lg hover:shadow-xl transition overflow-hidden">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 p-8">
 
-<div class="product-content-box">
-    <div class="product-image">
-        {% if product.thumbnail %}
-            <img src="{{ product.thumbnail }}" alt="Product thumbnail" width="300">
-        {% endif %}
+            <!-- Image -->
+            <div class="flex items-center justify-center">
+            {% if product.thumbnail %}
+                <img src="{{ product.thumbnail }}" alt="{{ product.name }}"
+                    class="w-full max-w-md rounded-xl object-cover shadow-md">
+            {% else %}
+                <div class="w-full max-w-md h-80 bg-[var(--mint)] flex items-center justify-center text-[var(--leaf)] rounded-xl font-semibold">
+                No Image
+                </div>
+            {% endif %}
+            </div>
+
+            <!-- Info -->
+            <div class="flex flex-col justify-between">
+            <!-- Title -->
+            <div>
+                <h1 class="text-4xl font-extrabold text-[var(--leaf)] mb-4">{{ product.name }}</h1>
+
+                <!-- Badges -->
+                <div class="flex flex-wrap items-center gap-2 mb-6">
+                <span class="px-3 py-1 rounded-full text-xs font-semibold bg-[var(--mint)] text-[var(--leaf)]">
+                    {{ product.get_category_display }}
+                </span>
+                {% if product.is_featured %}
+                <span class="px-3 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-800">
+                    Featured
+                </span>
+                {% endif %}
+                </div>
+
+                <!-- Price -->
+                <p class="text-3xl font-bold text-[var(--leaf)] mb-6">
+                Rp {{ product.price }}
+                </p>
+
+                <hr class="border-t border-[var(--silver)] mb-6">
+
+                <!-- Description -->
+                <h2 class="text-lg font-semibold text-[var(--leaf)] mb-2">Description</h2>
+                <p class="text-[var(--ink)] leading-relaxed text-justify">
+                {{ product.description }}
+                </p>
+            </div>
+
+            <!-- Actions -->
+            <div class="mt-8 flex flex-wrap gap-3">
+                {% if user.is_authenticated and product.user == user %}
+                <a href="{% url 'main:edit_product' product.pk %}"
+                class="px-6 py-3 rounded-full border border-[var(--leaf)] text-[var(--leaf)] font-semibold hover:bg-[var(--mint)] transition">
+                Edit
+                </a>
+                <a href="{% url 'main:delete_product' product.pk %}"
+                class="inline-flex items-center px-6 py-3 rounded-full 
+                        bg-red-50 text-red-700 font-semibold 
+                        hover:bg-red-100 hover:text-red-800
+                        focus:outline-none focus:ring-2 focus:ring-red-200 
+                        transition">
+                Delete
+                </a>
+                {% endif %}
+            </div>
+            </div>
+        </div>
+
+        <!-- Seller -->
+        <div class="border-t border-[var(--silver)] bg-[var(--mint)]/30 p-6 lg:p-8">
+            <h3 class="text-lg font-semibold text-[var(--leaf)] mb-2">Seller Information</h3>
+            {% if product.user %}
+            <p class="text-[var(--ink)]">Seller: 
+                <span class="font-medium text-[var(--leaf)]">{{ product.user.username }}</span>
+            </p>
+            {% else %}
+            <p class="text-[var(--ink)]">Seller: Anonymous</p>
+            {% endif %}
+            <p class="text-sm text-gray-500 mt-1">
+            </p>
+        </div>
+        </div>
     </div>
-
-    <div class="product-details">
-        <p><b>Category:</b> {{ product.category }}</p>
-        <p><b>Price:</b> Rp {{ product.price }}</p>
-        <p><b>Description:</b> {{ product.description }}</p>
-    </div>
 </div>
-
-{% if product.user %}
-    <p>Seller: {{ product.user.username }}</p>
-{% else %}
-    <p>Author: Anonymous</p>
-{% endif %}
-
 {% endblock content %}
