@@ -4,156 +4,91 @@
 
 {% block content %}
 {% include 'navbar.html' %}
+{% include 'confirm_delete.html' %}
 
 <div class="max-w-7xl mx-auto w-full px-6 lg:px-8 mt-24"> 
     <!-- Welcome / About Section -->
     <section class="relative rounded-2xl shadow-lg overflow-hidden mb-10">
-    <!-- Background image -->
-    <div class="absolute inset-0">
-        <img src="{% static 'image/profile.jpg' %}" 
-            alt="Football background" 
-            class="w-full h-full object-cover opacity-60">
-        <!-- Overlay tipis gelap biar teks lebih kebaca -->
-        <div class="absolute inset-0 bg-black/50"></div>
-    </div>
+        <!-- Background image -->
+        <div class="absolute inset-0">
+            <img src="{% static 'image/profile.jpg' %}" 
+                alt="Football background" 
+                class="w-full h-full object-cover opacity-60">
+            <!-- Overlay tipis gelap biar teks lebih kebaca -->
+            <div class="absolute inset-0 bg-black/50"></div>
+        </div>
 
-    <!-- Content -->
-    <div class="relative z-10 px-8 lg:px-16 py-16 text-center text-white">
-        <h1 class="text-4xl md:text-5xl font-extrabold mb-6 drop-shadow-lg">
-        Welcome to <span class="text-[var(--mint)]">ZSPORT</span>
-        </h1>
-        <p class="max-w-3xl mx-auto text-lg md:text-xl leading-relaxed mb-6">
-        Your one-stop shop for all things football!  
-        We offer a wide range of products: <span class="font-semibold">equipment</span>,  
-        <span class="font-semibold">clothing</span>, and more.  
-        Our mission is to provide <span class="text-[var(--mint)] font-bold">high-quality products</span>  
-        at affordable prices.
-        </p>
-    </div>
+        <!-- Content -->
+        <div class="relative z-10 px-8 lg:px-16 py-16 text-center text-white">
+            <h1 class="text-4xl md:text-5xl font-extrabold mb-6 drop-shadow-lg">
+            Welcome to <span class="text-[var(--mint)]">ZSPORT</span>
+            </h1>
+            <p class="max-w-3xl mx-auto text-lg md:text-xl leading-relaxed mb-6">
+            Your one-stop shop for all things football!  
+            We offer a wide range of products: <span class="font-semibold">equipment</span>,  
+            <span class="font-semibold">clothing</span>, and more.  
+            Our mission is to provide <span class="text-[var(--mint)] font-bold">high-quality products</span>  
+            at affordable prices.
+            </p>
+        </div>
     </section>
 
     <!-- Products Section -->
     <section class="bg-white border border-[var(--silver)] rounded-2xl shadow p-6 lg:p-8">
         <!-- Filters + Last login -->
         <div class="flex items-center justify-between mb-6 flex-wrap gap-3">
-        <div class="flex gap-2">
-            <a href="?filter=all"
-            class="px-4 py-2 rounded-full border border-[var(--leaf)] text-[var(--leaf)] hover:bg-[var(--silver)] transition">
-            All Products
-            </a>
-            <a href="?filter=my"
-            class="px-4 py-2 rounded-full border border-[var(--leaf)] text-[var(--leaf)] hover:bg-[var(--silver)] transition">
-            My Products
-            </a>
-        </div>
-        <span class="text-sm text-gray-600">
-            Last login session:
-            <span class="font-medium text-[var(--leaf)]">{{ last_login }}</span>
-        </span>
+            <div class="flex gap-2">
+                <!-- Tombol Filter -->
+                <a id="filter-all"
+                    class="px-4 py-2 rounded-full bg-[var(--leaf)] text-white font-medium hover:brightness-95 transition">
+                    All Products
+                </a>
+                <a id="filter-my"
+                    class="px-4 py-2 rounded-full border border-[var(--leaf)] text-[var(--leaf)] font-medium hover:bg-[var(--silver)] transition">
+                    My Products
+                </a>
+
+                <!-- Tombol Add Product (AJAX) -->
+                <button onclick="showModal()" 
+                    class="px-4 py-2 rounded-full bg-[var(--leaf)] text-white font-semibold hover:brightness-95 transition">
+                    Create Product (AJAX)
+                </button>
+
+                <!-- Tombol Refresh AJAX -->
+                <button id="refresh-btn"
+                    class="px-4 py-2 border border-[var(--leaf)] text-[var(--leaf)] rounded-full font-semibold hover:bg-[var(--mint)]/20 transition">
+                    Refresh
+                </button>
+            </div>
+
+            <span class="text-sm text-gray-600">
+                Last login session:
+                <span class="font-medium text-[var(--leaf)]">{{ last_login }}</span>
+            </span>
         </div>
 
-        {% if not product_list %}
-        <!-- Empty state -->
-        <div class="flex flex-col items-center justify-center py-16 text-center">
+        <!-- State: Loading -->
+        <div id="loading" class="hidden text-center py-16 text-gray-500">
+            Loading products...
+        </div>
+
+        <!-- State: Error -->
+        <div id="error" class="hidden text-center py-16 text-red-500">
+            Failed to load products. Please try again.
+        </div>
+
+        <!-- State: Empty -->
+        <div id="empty" class="hidden flex flex-col items-center justify-center py-16 text-center">
             <div class="w-40 h-40 mb-6 rounded-full bg-gray-100 flex items-center justify-center text-gray-400">
                 <img src="{% static 'image/no-product.png' %}" alt="No products available" class="w-full h-full object-contain">
             </div>
             <h3 class="text-lg font-semibold text-gray-700">No products available</h3>
             <p class="text-gray-500">Please check again later or add your first product!</p>
         </div>
-        {% else %}
-        <!-- Product grid -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {% for product in product_list %}
-            <article class="group bg-white border border-[var(--silver)] rounded-2xl overflow-hidden
-                            shadow-sm hover:shadow-md hover:-translate-y-0.5 hover:ring-1 hover:ring-[var(--leaf)]
-                            transition">
-                <!-- Image -->
-                <div class="relative">
-                {% if product.thumbnail %}
-                    <a href="{% url 'main:show_product' product.id %}" class="block bg-gray-50">
-                    <img src="{{ product.thumbnail }}" alt="{{ product.name }}"
-                        class="w-full aspect-square object-cover">
-                    </a>
-                {% else %}
-                    <div class="w-full aspect-square bg-gray-100 flex items-center justify-center text-gray-400">
-                    No Image
-                    </div>
-                {% endif %}
 
-                <!-- Left badges (Category) -->
-                <div class="absolute top-3 left-3 flex flex-wrap gap-2">
-                    {% if product.category %}
-                    <span class="px-2.5 py-1 rounded-md text-xs font-semibold bg-[var(--lightgreen)] text-white shadow">
-                        {{ product.get_category_display }}
-                    </span>
-                    {% endif %}
-                </div>
+        <!-- Grid Produk (AJAX Render Target) -->
+        <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
 
-                <!-- Right badges (Status) -->
-                <div class="absolute top-3 right-3 flex flex-wrap gap-2">
-                    {% if product.is_featured %}
-                    <span class="px-2.5 py-1 rounded-md text-xs font-semibold bg-yellow-100 text-yellow-800 border border-yellow-300 shadow">
-                        Featured
-                    </span>
-                    {% endif %}
-                    {% if product.is_hot %}
-                    <span class="px-2.5 py-1 rounded-md text-xs font-semibold bg-red-100 text-red-800 border border-red-200 shadow">
-                        Hot
-                    </span>
-                    {% endif %}
-                </div>
-                </div>
-
-                <!-- Body -->
-                <div class="p-5">
-                <h2 class="text-xl font-extrabold text-[var(--ink)] leading-snug mb-2">
-                    <a href="{% url 'main:show_product' product.id %}" class="hover:text-[var(--leaf)]">
-                    {{ product.name }}
-                    </a>
-                </h2>
-
-                <p class="text-xl font-extrabold text-[var(--leaf)] mb-2">
-                    Rp {{ product.price }}
-                </p>
-
-                <p class="text-[15px] text-gray-700 leading-7 text-justify line-clamp-3 mb-4">
-                    {{ product.description|truncatewords:10 }}
-                </p>
-
-                <!-- Actions -->
-                <div class="flex flex-wrap items-center gap-3">
-                    <a href="{% url 'main:show_product' product.id %}"
-                    class="inline-flex items-center h-10 px-5 rounded-full
-                            bg-[var(--lightgreen)] text-white text-sm font-semibold
-                            hover:brightness-95 focus:outline-none
-                            focus:ring-2 focus:ring-[var(--leaf)]/30 transition">
-                    Read More
-                    </a>
-
-                    {% if user.is_authenticated and product.user == user %}
-                    <a href="{% url 'main:edit_product' product.pk %}"
-                        class="inline-flex items-center h-10 px-5 rounded-full
-                                border border-[var(--leaf)] text-[var(--leaf)] text-sm font-semibold
-                                hover:bg-[var(--silver)] focus:outline-none
-                                focus:ring-2 focus:ring-[var(--leaf)]/20 transition">
-                        Edit
-                    </a>
-
-                    <a href="{% url 'main:delete_product' product.pk %}"
-                        class="inline-flex items-center h-10 px-5 rounded-full
-                                text-red-700 bg-red-50 text-sm font-semibold
-                                hover:bg-red-100 focus:outline-none
-                                focus:ring-2 focus:ring-red-300 transition">
-                        Delete
-                    </a>
-                    {% endif %}
-                </div>
-                </div>
-            </article>
-            {% endfor %}
-        </div>
-        {% endif %}
     </section>
 
     <!-- Footer -->
@@ -162,5 +97,134 @@
         <p class="inline">{{ owner_name }} - {{ class }}</p>
     </footer>
 </div>  {# tutup div max-w-7xl #}
+
+<!-- ====================================================== -->
+<!-- ===================== SCRIPT AREA ==================== -->
+<!-- ====================================================== -->
+<script>
+    // Configuration
+    const PRODUCT_API_ENDPOINT = "{% url 'main:show_json' %}";
+    const CURRENT_USER_ID = "{{ user.id|default_if_none:'' }}";
+
+    // DOM Elements
+    const loading = document.getElementById('loading');
+    const error = document.getElementById('error');
+    const empty = document.getElementById('empty');
+    const grid = document.getElementById('product-grid');
+    const refreshBtn = document.getElementById('refresh-btn');
+    const filterAllBtn = document.getElementById('filter-all');
+    const filterMyBtn = document.getElementById('filter-my');
+
+    // State variables
+    let allProducts = [];
+    let activeFilter = 'all';
+
+    // Update Filter Buttons
+    function updateFilterButtons() {
+        if (activeFilter === 'all') {
+            filterAllBtn.className = 'px-4 py-2 rounded-full bg-[var(--leaf)] text-white font-medium hover:brightness-95 transition';
+            filterMyBtn.className = 'px-4 py-2 rounded-full border border-[var(--leaf)] text-[var(--leaf)] font-medium hover:bg-[var(--silver)] transition';
+        } else {
+            filterMyBtn.className = 'px-4 py-2 rounded-full bg-[var(--leaf)] text-white font-medium hover:brightness-95 transition';
+            filterAllBtn.className = 'px-4 py-2 rounded-full border border-[var(--leaf)] text-[var(--leaf)] font-medium hover:bg-[var(--silver)] transition';
+        }
+    }
+
+    // Show/hide sections
+    function displayState({ showLoading = false, showError = false, showEmpty = false, showGrid = false }) {
+        loading.classList.toggle('hidden', !showLoading);
+        error.classList.toggle('hidden', !showError);
+        empty.classList.toggle('hidden', !showEmpty);
+        grid.classList.toggle('hidden', !showGrid);
+    }
+
+    // Render product card
+    function buildProductCard(p) {
+        const card = document.createElement('article');
+        card.className = 'group bg-white border border-[var(--silver)] rounded-2xl overflow-hidden shadow-sm hover:shadow-md hover:-translate-y-0.5 hover:ring-1 hover:ring-[var(--leaf)] transition';
+        const img = p.thumbnail
+            ? `<img src="${p.thumbnail}" alt="${p.name}" class="w-full aspect-square object-cover">`
+            : `<div class="w-full aspect-square bg-gray-100 flex items-center justify-center text-gray-400">No Image</div>`;
+
+        const featured = p.is_featured
+            ? `<span class="px-2.5 py-1 rounded-md text-xs font-semibold bg-yellow-100 text-yellow-800 border border-yellow-300 shadow">Featured</span>`
+            : '';
+
+        card.innerHTML = `
+            <div class="relative">
+                <div class="absolute top-3 right-3 flex flex-wrap gap-2">${featured}</div>
+                ${img}
+            </div>
+            <div class="p-5">
+                <h2 class="text-xl font-extrabold text-[var(--ink)] leading-snug mb-2">${p.name}</h2>
+                <p class="text-xl font-extrabold text-[var(--leaf)] mb-2">Rp ${p.price}</p>
+                <p class="text-[15px] text-gray-700 leading-7 text-justify line-clamp-3 mb-4">${p.description}</p>
+                <div class="flex flex-wrap items-center gap-3">
+                    <a href="/product/${p.id}/"
+                    class="inline-flex items-center h-10 px-5 rounded-full bg-[var(--lightgreen)] text-white text-sm font-semibold hover:brightness-95 focus:outline-none focus:ring-2 focus:ring-[var(--leaf)]/30 transition">
+                    Read More
+                    </a>
+
+                    <!-- Tombol Edit Produk -->
+                    ${p.user_id == CURRENT_USER_ID ? `
+                    <a href="/product/${p.id}/edit"
+                        class="inline-flex items-center h-10 px-5 rounded-full border border-[var(--leaf)] text-[var(--leaf)] text-sm font-semibold hover:bg-[var(--silver)] focus:outline-none focus:ring-2 focus:ring-[var(--leaf)]/20 transition">
+                        Edit
+                    </a>
+
+                    <!-- Tombol Delete Produk -->
+                    <button onclick="showDeleteModal('${p.id}')"
+                        class="inline-flex items-center h-10 px-5 rounded-full bg-red-50 text-red-700 text-sm font-semibold hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-300 transition">
+                        Delete
+                    </button>` : ''}
+                </div>
+            </div>`;
+        return card;
+    }
+
+    // Render all products
+    function renderProducts(products) {
+        grid.innerHTML = '';
+        products.forEach(p => grid.appendChild(buildProductCard(p)));
+    }
+
+    // Filter & display
+    function filterAndDisplayProducts() {
+        updateFilterButtons();
+        const filtered = activeFilter === 'all'
+            ? allProducts
+            : allProducts.filter(p => String(p.user_id) === String(CURRENT_USER_ID));
+        if (filtered.length === 0) displayState({ showEmpty: true });
+        else {
+            renderProducts(filtered);
+            displayState({ showGrid: true });
+        }
+    }
+
+    // Fetch data from server (reliable version)
+    async function fetchProducts() {
+        try {
+            displayState({ showLoading: true });
+            const response = await fetch(PRODUCT_API_ENDPOINT, { headers: { 'Accept': 'application/json' } });
+            if (!response.ok) throw new Error('Network error');
+            const data = await response.json();
+            allProducts = Array.isArray(data) ? data : [];
+            filterAndDisplayProducts();
+        } catch (err) {
+            console.error("🔥 Fetch error:", err);
+            displayState({ showError: true });
+            showToast("Error", "Failed to load products.", "error");
+        }
+    }
+
+    // Refresh products & listeners
+    document.addEventListener('DOMContentLoaded', () => {
+        fetchProducts(); // Load saat halaman siap
+        refreshBtn.addEventListener('click', fetchProducts);
+        filterAllBtn.addEventListener('click', () => { activeFilter = 'all'; filterAndDisplayProducts(); });
+        filterMyBtn.addEventListener('click', () => { activeFilter = 'my'; filterAndDisplayProducts(); });
+        document.addEventListener('productAdded', fetchProducts);
+    });
+</script>
 
 {% endblock content %}

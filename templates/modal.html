@@ -1,0 +1,74 @@
+<!-- Modal -->
+<div id="crudModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+    <div id="crudModalContent" class="bg-white rounded-xl shadow-xl w-96 max-h-[90vh] overflow-y-auto p-6 scale-95 opacity-0 transition-all duration-150">
+        <h2 id="modal-title" class="text-xl font-bold text-[var(--leaf)] mb-4">Create Product</h2>
+
+        <form id="productForm" class="space-y-4">
+        {% csrf_token %}
+        <input type="text" name="name" placeholder="Product Name" required class="w-full border p-2 rounded-lg">
+        <input type="number" name="price" placeholder="Price" required class="w-full border p-2 rounded-lg">
+        <textarea name="description" placeholder="Description" class="w-full border p-2 rounded-lg"></textarea>
+        <input type="url" name="thumbnail" placeholder="Thumbnail URL" class="w-full border p-2 rounded-lg">
+        <select name="category" class="w-full border p-2 rounded-lg">
+            <option value="clothing">Clothing</option>
+            <option value="footwear">Footwear</option>
+            <option value="equipment">Equipment</option>
+            <option value="accessories">Accessories</option>
+            <option value="merchandise">Merchandise</option>
+        </select>
+        <div class="flex items-center gap-2">
+            <input type="checkbox" name="is_featured" id="is_featured">
+            <label for="is_featured">Featured Product</label>
+        </div>
+        <button type="submit" class="w-full bg-[var(--leaf)] text-white py-2 rounded-lg hover:brightness-95">Save</button>
+        </form>
+
+        <button onclick="hideModal()" class="mt-4 w-full py-2 rounded-lg bg-gray-200 hover:bg-gray-300">Cancel</button>
+    </div>
+</div>
+
+<script>
+    function showModal() {
+        const modal = document.getElementById("crudModal");
+        const modalContent = document.getElementById("crudModalContent");
+        modal.classList.remove("hidden");
+        setTimeout(() => {
+            modalContent.classList.remove("opacity-0", "scale-95");
+            modalContent.classList.add("opacity-100", "scale-100");
+        }, 50);
+    }
+
+    function hideModal() {
+        const modal = document.getElementById("crudModal");
+        const modalContent = document.getElementById("crudModalContent");
+        modalContent.classList.remove("opacity-100", "scale-100");
+        modalContent.classList.add("opacity-0", "scale-95");
+        setTimeout(() => modal.classList.add("hidden"), 150);
+    }
+
+    document.getElementById("productForm").addEventListener("submit", async function(e) {
+        e.preventDefault();
+
+        try {
+            const response = await fetch("{% url 'main:add_product_ajax' %}", {
+                method: "POST",
+                body: new FormData(this),
+                headers: { "X-Requested-With": "XMLHttpRequest" },
+            });
+
+            const result = await response.json();
+
+            if (response.ok && result.success) {
+                showToast("Success!", "Product added successfully.", "success");
+                hideModal();
+                this.reset();
+                document.dispatchEvent(new CustomEvent("productAdded"));
+            } else {
+                showToast("Error", "Failed to add product.", "error");
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            showToast("Error", "Something went wrong.", "error");
+        }
+    });
+</script>
