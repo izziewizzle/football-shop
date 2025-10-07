@@ -168,3 +168,57 @@ Sementara itu, Grid Layout bekerja dalam dua dimensi, yakni baris (rows) dan kol
 ## 5. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial)!
 Pertama saya menginstall dan mengkonfigurasi Tailwind agar bisa digunakan untuk styling di proyek. Setelah itu saya melakukan perubahan pada models.py dengan menambahkan field id agar setiap produk lebih mudah diidentifikasi ketika ingin diedit atau dihapus, lalu menjalankan makemigrations dan migrate untuk memperbarui database. Berikutnya saya mengimplementasikan fungsi edit dan delete produk melalui views.py dan urls.py, serta menambahkan tombol edit dan delete pada setiap card produk. Untuk tampilan, saya mulai merapikan halaman login, register, tambah produk, edit produk, dan detail produk dengan class bawaan Tailwind supaya desain lebih bersih dan menarik. Pada halaman daftar produk, saya tambahkan kondisi jika belum ada produk maka akan muncul pesan dan gambar khusus, sementara jika sudah ada produk maka produk ditampilkan dalam bentuk card lengkap dengan tombol edit dan delete. Saya juga menambahkan fitur filter berdasarkan kategori agar pengguna bisa lebih mudah mencari produk sesuai kebutuhan. Terakhir, saya membuat navbar yang responsif dengan Tailwind dan menambahkan tombol Home serta link navigasi lain sehingga halaman tetap nyaman digunakan baik di layar desktop maupun mobile.
 </details>
+
+<details align="justify">
+    <summary><b>Tugas 6</b></summary>
+
+## 1. Apa perbedaan antara synchronous request dan asynchronous request?
+Secara sederhana, perbedaan utama antara request synchronous dan asynchronous terletak pada cara browser dan server berkomunikasi.
+
+Pada synchronous request, ketika pengguna melakukan suatu aksi seperti mengirim form, browser akan mengirim data ke server dan menunggu respon sepenuhnya sebelum bisa melakukan aktivitas lain. Setelah server memproses data, halaman akan direfresh secara penuh untuk menampilkan hasilnya. Contohnya adalah saat pengguna mengisi form login konvensional: setelah menekan tombol Login, seluruh halaman akan dimuat ulang dan diarahkan ke halaman utama.
+
+Sementara itu, pada asynchronous request (yang menggunakan AJAX), proses komunikasi antara browser dan server berjalan di latar belakang (background). Browser dapat terus menampilkan halaman tanpa harus menunggu respon server secara penuh. Ketika data dari server sudah diterima (biasanya dalam format JSON), JavaScript akan langsung memperbarui bagian tertentu dari halaman tanpa perlu reload seluruh tampilan.
+Sebagai contoh, ketika pengguna menambahkan produk baru pada proyek ZSPORT menggunakan AJAX, daftar produk akan otomatis diperbarui di halaman utama tanpa perlu memuat ulang seluruh laman.
+
+## 2. Bagaimana AJAX bekerja di Django (alur request–response)?
+Secara garis besar, alur kerja AJAX di Django bisa dijelasin lewat beberapa langkah berikut:
+1. Pengguna melakukan aksi di halaman (misalnya klik tombol “Create Product” atau submit form login).
+2. JavaScript mengirimkan permintaan (request) ke server Django di belakang layar tanpa melakukan reload halaman.
+3. Server Django memproses data tersebut lewat fungsi view yang sesuai (misalnya menambah produk, mengecek login, atau menyimpan data baru).
+4. Setelah diproses, Django tidak mengirim halaman HTML, tapi mengirimkan data dalam bentuk JSON yang berisi hasil atau status dari proses tersebut.
+5. JavaScript menerima respon JSON itu dan langsung memperbarui tampilan halaman sesuai hasilnya — misalnya menampilkan notifikasi sukses, menambahkan produk baru, atau menampilkan pesan error.
+Dengan cara kerja ini, AJAX memungkinkan interaksi antara pengguna dan server berjalan lebih cepat dan dinamis tanpa perlu berpindah halaman.
+
+## 3. Apa keuntungan menggunakan AJAX dibandingkan render biasa di Django?
+Pertama, halaman tidak perlu dimuat ulang sepenuhnya setiap kali pengguna melakukan suatu aksi. Hal ini membuat proses terasa lebih cepat dan efisien karena hanya bagian tertentu dari halaman yang diperbarui.
+
+Kedua, pengalaman pengguna (User Experience) menjadi lebih baik karena tampilan halaman tidak mengalami perubahan besar atau kedipan yang mengganggu akibat proses reload. Pengguna tetap berada di halaman yang sama dan dapat langsung melihat hasil interaksinya.
+
+Ketiga, penggunaan AJAX juga membuat pertukaran data antara server dan browser menjadi lebih ringan, karena Django hanya mengirimkan data dalam format JSON, bukan keseluruhan struktur HTML seperti pada render biasa.
+
+Selain itu, interaktivitas website meningkat karena perubahan tampilan bisa diatur langsung dengan JavaScript tanpa perlu me-render ulang template. Hal ini juga memudahkan penambahan fitur dinamis seperti toast notification atau loading state.
+
+Sebagai contoh, pada proyek ZSPORT, ketika pengguna menambahkan produk melalui modal berbasis AJAX, produk baru akan langsung muncul di daftar produk dan sistem menampilkan pesan notifikasi sukses, semuanya tanpa perlu melakukan reload halaman. Dengan cara ini, interaksi menjadi lebih cepat dan mulus.
+
+## 4. Bagaimana cara memastikan keamanan saat menggunakan AJAX untuk fitur Login dan Register di Django?
+Karena AJAX mengirimkan data langsung ke server, aspek keamanan tetap menjadi hal yang penting untuk diperhatikan.
+Beberapa langkah yang diterapkan pada proyek ini untuk menjaga keamanan saat menggunakan AJAX antara lain:
+1. Menggunakan CSRF Token
+    Setiap form yang dikirim melalui AJAX tetap menyertakan {% csrf_token %} agar Django dapat memverifikasi bahwa permintaan tersebut berasal dari sumber yang sah.
+2. Validasi data di sisi server (server-side validation)
+    Walaupun ada validasi di sisi frontend, Django tetap memvalidasi ulang data di backend menggunakan UserCreationForm dan AuthenticationForm.
+3. Membatasi akses endpoint
+    Endpoint tertentu seperti delete product dilindungi dengan @login_required agar hanya pengguna yang telah login yang dapat mengaksesnya.
+4. Pemeriksaan header AJAX
+    Django memeriksa apakah request yang diterima benar-benar berasal dari AJAX, bukan dari sumber eksternal yang berpotensi berbahaya.
+5. Menghindari pengiriman data sensitif
+    Respon AJAX hanya berisi status dan pesan singkat, tanpa menyertakan informasi sensitif seperti password atau data pribadi pengguna.
+
+## 5. Bagaimana AJAX mempengaruhi pengalaman pengguna (User Experience) pada website?
+Website menjadi terasa lebih cepat, smooth, dan modern karena pengguna tidak perlu menunggu proses reload setiap kali melakukan suatu aksi seperti menambah produk, login, atau logout.
+
+Perubahan tampilan terjadi secara langsung di halaman yang sama, dan adanya toast notification memberikan feedback visual yang jelas kepada pengguna tentang hasil dari aksi yang mereka lakukan.
+Sebagai contoh, ketika pengguna berhasil login di ZSPORT, muncul pesan toast “Login Successful!” tanpa harus berpindah halaman. Hal ini membuat pengalaman penggunaan terasa lebih natural, responsif, dan mirip seperti menggunakan aplikasi mobile.
+
+Secara keseluruhan, AJAX membuat website lebih interaktif dan hidup. Pengguna dapat tetap fokus pada aktivitasnya tanpa terganggu oleh proses pemuatan ulang halaman.
+</details>
